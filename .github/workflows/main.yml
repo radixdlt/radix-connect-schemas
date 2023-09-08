@@ -76,9 +76,6 @@ jobs:
 
   test_and_lint:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./typescript
 
     steps:
       - uses: actions/checkout@v3

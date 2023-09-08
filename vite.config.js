@@ -5,8 +5,8 @@ const { defineConfig } = require('vite')
 module.exports = defineConfig({
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'src/schemas.ts'),
-      name: 'schemas',
+      entry: path.resolve(__dirname, 'src/radix-connect-schemas.ts'),
+      name: 'radix-connect-schemas',
     },
   },
 })

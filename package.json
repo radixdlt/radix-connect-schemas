@@ -26,20 +26,20 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/schemas.mjs",
+  "main": "./dist/radix-connect-schemas.mjs",
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/schemas.d.ts",
-        "default": "./dist/schemas.mjs"
+        "types": "./dist/radix-connect-schemas.d.ts",
+        "default": "./dist/radix-connect-schemas.mjs"
       },
       "require": {
-        "types": "./dist/schemas.d.ts",
-        "default": "./dist/schemas.umd.js"
+        "types": "./dist/radix-connect-schemas.d.ts",
+        "default": "./dist/radix-connect-schemas.umd.js"
       }
     }
   },
-  "types": "./dist/schemas.d.ts",
+  "types": "./dist/radix-connect-schemas.d.ts",
   "scripts": {
     "build": "vite build && npm run build:types",
     "build:types": "tsc --project tsconfig.types.json --emitDeclarationOnly",

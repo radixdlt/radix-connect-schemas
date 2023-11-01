@@ -323,10 +323,33 @@ export const WalletInteractionResponse = union([
   WalletInteractionFailureResponse,
 ])
 
-export const ExtensionInteraction = object({
+export const extensionInteractionDiscriminator = {
+  extensionStatus: 'extensionStatus',
+  openPopup: 'openPopup',
+} as const
+
+export const StatusExtensionInteraction = object({
   interactionId: string(),
-  discriminator: literal('extensionStatus'),
+  discriminator: literal(extensionInteractionDiscriminator.extensionStatus),
 })
+
+export type StatusExtensionInteraction = z.infer<
+  typeof StatusExtensionInteraction
+>
+
+export const OpenPopupExtensionInteraction = object({
+  interactionId: string(),
+  discriminator: literal(extensionInteractionDiscriminator.openPopup),
+})
+
+export type OpenPopupExtensionInteraction = z.infer<
+  typeof OpenPopupExtensionInteraction
+>
+
+export const ExtensionInteraction = union([
+  StatusExtensionInteraction,
+  OpenPopupExtensionInteraction,
+])
 
 export type ExtensionInteraction = z.infer<typeof ExtensionInteraction>
 

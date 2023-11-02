@@ -215,12 +215,23 @@ export const Metadata = object({
   dAppDefinitionAddress: string(),
 })
 
+export type MetadataWithOrigin = z.infer<typeof MetadataWithOrigin>
+export const MetadataWithOrigin = Metadata.and(object({ origin: string() }))
+
 export type WalletInteraction = z.infer<typeof WalletInteraction>
 export const WalletInteraction = object({
   interactionId: string(),
   metadata: Metadata,
   items: WalletInteractionItems,
 })
+
+export type WalletInteractionWithOrigin = z.infer<
+  typeof WalletInteractionWithOrigin
+>
+
+export const WalletInteractionWithOrigin = WalletInteraction.and(
+  object({ metadata: MetadataWithOrigin }),
+)
 
 export type WalletUnauthorizedRequestResponseItems = z.infer<
   typeof WalletUnauthorizedRequestResponseItems

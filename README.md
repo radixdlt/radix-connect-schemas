@@ -10,9 +10,9 @@ Repository for common zod data schemas used by Radix Connect web clients.
 
 # License
 
-The Wallet SDK binaries are licensed under the [Radix Software EULA](http://www.radixdlt.com/terms/genericEULA).
+The Radix Connect Schemas binaries are licensed under the [Radix Software EULA](http://www.radixdlt.com/terms/genericEULA).
 
-The Wallet SDK code is released under [Apache 2.0 license](LICENSE).
+The Radix Connect Schemas code is released under [Apache 2.0 license](LICENSE).
 
       Copyright 2023 Radix Publishing Ltd
 

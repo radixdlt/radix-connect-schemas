@@ -1,6 +1,15 @@
 import type { ResultAsync } from 'neverthrow'
 import type { z, ZodError } from 'zod'
-import { array, boolean, literal, number, object, string, union } from 'zod'
+import {
+  array,
+  boolean,
+  literal,
+  number,
+  object,
+  string,
+  union,
+  any,
+} from 'zod'
 
 /**
  * Wallet schemas
@@ -215,6 +224,14 @@ export const Metadata = object({
   dAppDefinitionAddress: string(),
 })
 
+export const WalletInteractionArbitraryData = object({
+  sessionId: string().optional(),
+}).or(any())
+
+export type WalletInteractionArbitraryData = z.infer<
+  typeof WalletInteractionArbitraryData
+>
+
 export type MetadataWithOrigin = z.infer<typeof MetadataWithOrigin>
 export const MetadataWithOrigin = Metadata.and(object({ origin: string() }))
 
@@ -223,6 +240,7 @@ export const WalletInteraction = object({
   interactionId: string(),
   metadata: Metadata,
   items: WalletInteractionItems,
+  arbitraryData: WalletInteractionArbitraryData.optional(),
 })
 
 export type WalletInteractionWithOrigin = z.infer<

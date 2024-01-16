@@ -1,6 +1,15 @@
 import type { ResultAsync } from 'neverthrow'
 import type { z, ZodError } from 'zod'
-import { array, boolean, literal, number, object, string, union } from 'zod'
+import {
+  array,
+  boolean,
+  literal,
+  number,
+  object,
+  string,
+  union,
+  any,
+} from 'zod'
 
 /**
  * Wallet schemas
@@ -215,14 +224,67 @@ export const Metadata = object({
   dAppDefinitionAddress: string(),
 })
 
+export const WalletInteractionArbitraryData = object({
+  sessionId: string().optional(),
+}).or(any())
+
+export type WalletInteractionArbitraryData = z.infer<
+  typeof WalletInteractionArbitraryData
+>
+
 export type MetadataWithOrigin = z.infer<typeof MetadataWithOrigin>
 export const MetadataWithOrigin = Metadata.and(object({ origin: string() }))
 
 export type WalletInteraction = z.infer<typeof WalletInteraction>
 export const WalletInteraction = object({
   interactionId: string(),
+  discrminator: literal('walletInteraction'),
   metadata: Metadata,
   items: WalletInteractionItems,
+  arbitraryData: WalletInteractionArbitraryData.optional(),
+})
+
+export const linkClientInteractionPurpose = {
+  general: 'general',
+} as const
+
+export type LinkClientInteraction = z.infer<typeof LinkClientInteraction>
+export const LinkClientInteraction = object({
+  discriminator: literal('linkClient'),
+  clientId: string(),
+  purpose: literal(linkClientInteractionPurpose.general),
+})
+
+export type HandshakeInteraction = z.infer<typeof HandshakeInteraction>
+export const HandshakeInteraction = object({
+  discriminator: literal('handshake'),
+  metadata: object({
+    clientVersion: string(),
+    client: string(),
+    osVersion: string(),
+  }),
+})
+
+export type AccountListRequestInteraction = z.infer<
+  typeof AccountListRequestInteraction
+>
+export const AccountListRequestInteraction = object({
+  discriminator: literal('accountListRequest'),
+})
+
+export type AccountListInteraction = z.infer<typeof AccountListInteraction>
+export const AccountListInteraction = object({
+  discriminator: literal('accountList'),
+  accountsHash: string(),
+})
+
+export type AccountListResponseInteraction = z.infer<
+  typeof AccountListResponseInteraction
+>
+export const AccountListResponseInteraction = object({
+  discriminator: literal('accountListResponse'),
+  accountsHash: string(),
+  accounts: Account.array(),
 })
 
 export type WalletInteractionWithOrigin = z.infer<

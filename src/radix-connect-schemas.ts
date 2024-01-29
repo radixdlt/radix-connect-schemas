@@ -433,6 +433,7 @@ export type OpenPopupExtensionInteraction = z.infer<
 export const ExtensionInteraction = union([
   StatusExtensionInteraction,
   OpenPopupExtensionInteraction,
+  RemoveSessionIdInteraction,
 ])
 
 export type ExtensionInteraction = z.infer<typeof ExtensionInteraction>

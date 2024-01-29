@@ -398,8 +398,19 @@ export const WalletInteractionResponse = union([
 
 export const extensionInteractionDiscriminator = {
   extensionStatus: 'extensionStatus',
+  removeSessionId: 'removeSessionId',
   openPopup: 'openPopup',
 } as const
+
+export const RemoveSessionIdInteraction = object({
+  interactionId: string(),
+  discriminator: literal(extensionInteractionDiscriminator.removeSessionId),
+  sessionId: string(),
+})
+
+export type RemoveSessionIdInteraction = z.infer<
+  typeof RemoveSessionIdInteraction
+>
 
 export const StatusExtensionInteraction = object({
   interactionId: string(),

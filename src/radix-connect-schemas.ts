@@ -238,7 +238,7 @@ export const MetadataWithOrigin = Metadata.and(object({ origin: string() }))
 export type WalletInteraction = z.infer<typeof WalletInteraction>
 export const WalletInteraction = object({
   interactionId: string(),
-  discriminator: literal('walletInteraction'),
+  discriminator: literal('walletInteraction').optional(),
   metadata: Metadata,
   items: WalletInteractionItems,
   arbitraryData: WalletInteractionArbitraryData.optional(),

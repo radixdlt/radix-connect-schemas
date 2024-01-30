@@ -1,6 +1,15 @@
 import type { ResultAsync } from 'neverthrow'
 import type { z, ZodError } from 'zod'
-import { array, boolean, literal, number, object, string, union } from 'zod'
+import {
+  array,
+  boolean,
+  literal,
+  number,
+  object,
+  string,
+  union,
+  any,
+} from 'zod'
 
 /**
  * Wallet schemas
@@ -215,14 +224,64 @@ export const Metadata = object({
   dAppDefinitionAddress: string(),
 })
 
+export const WalletInteractionArbitraryData = object({
+  sessionId: string().optional(),
+}).or(any())
+
+export type WalletInteractionArbitraryData = z.infer<
+  typeof WalletInteractionArbitraryData
+>
+
 export type MetadataWithOrigin = z.infer<typeof MetadataWithOrigin>
 export const MetadataWithOrigin = Metadata.and(object({ origin: string() }))
 
 export type WalletInteraction = z.infer<typeof WalletInteraction>
 export const WalletInteraction = object({
   interactionId: string(),
+  discriminator: literal('walletInteraction').optional(),
   metadata: Metadata,
   items: WalletInteractionItems,
+  arbitraryData: WalletInteractionArbitraryData.optional(),
+})
+
+export type LinkClientInteraction = z.infer<typeof LinkClientInteraction>
+export const LinkClientInteraction = object({
+  discriminator: literal('linkClient'),
+})
+
+export type LinkClientInteractionResponse = z.infer<
+  typeof LinkClientInteractionResponse
+>
+export const LinkClientInteractionResponse = object({
+  discriminator: literal('linkClient'),
+  clientId: string(),
+})
+
+export type MetadataExchangeInteraction = z.infer<
+  typeof MetadataExchangeInteraction
+>
+export const MetadataExchangeInteraction = object({
+  discriminator: literal('metadataExchange'),
+  metadata: object({
+    client: string(),
+    osVersion: string(),
+    clientVersion: string(),
+  }),
+})
+
+export type AccountListRequestInteraction = z.infer<
+  typeof AccountListRequestInteraction
+>
+export const AccountListRequestInteraction = object({
+  discriminator: literal('accountListRequest'),
+})
+
+export type AccountListResponseInteraction = z.infer<
+  typeof AccountListResponseInteraction
+>
+export const AccountListResponseInteraction = object({
+  discriminator: literal('accountListResponse'),
+  accounts: Account.array(),
 })
 
 export type WalletInteractionWithOrigin = z.infer<
@@ -336,8 +395,19 @@ export const WalletInteractionResponse = union([
 
 export const extensionInteractionDiscriminator = {
   extensionStatus: 'extensionStatus',
+  removeSessionId: 'removeSessionId',
   openPopup: 'openPopup',
 } as const
+
+export const RemoveSessionIdInteraction = object({
+  interactionId: string(),
+  discriminator: literal(extensionInteractionDiscriminator.removeSessionId),
+  sessionId: string(),
+})
+
+export type RemoveSessionIdInteraction = z.infer<
+  typeof RemoveSessionIdInteraction
+>
 
 export const StatusExtensionInteraction = object({
   interactionId: string(),
@@ -360,6 +430,7 @@ export type OpenPopupExtensionInteraction = z.infer<
 export const ExtensionInteraction = union([
   StatusExtensionInteraction,
   OpenPopupExtensionInteraction,
+  RemoveSessionIdInteraction,
 ])
 
 export type ExtensionInteraction = z.infer<typeof ExtensionInteraction>
